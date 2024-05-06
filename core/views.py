@@ -23,7 +23,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
-        user = User.objects.filter(Q(email=request.data["email"]) | Q(phone=request.data["phone"]))
+        user = User.objects.filter(Q(email=request.data["email"]) | Q(phone=request.data["email"]))
         if not user.exists():
             raise InvalidToken(("user does not exist"))
         user = user.first()
