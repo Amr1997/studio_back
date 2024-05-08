@@ -55,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USER_TYPES = (
         (admin, admin),
         (studio_owner, studio_owner),
-        (studio_owner, studio_owner),
+        (customer, customer),
     )
     user_type = models.CharField(max_length=20, choices=USER_TYPES)
     email = models.EmailField(db_index=True, unique=True, null=True, blank=True)

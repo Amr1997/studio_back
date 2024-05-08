@@ -89,12 +89,13 @@ class StudioAPIView(generics.CreateAPIView, generics.UpdateAPIView, generics.Des
         return StudioCreateSerializer
 
     def get_queryset(self):
-        if self.request.get('owner_profile') is True:
+        if self.request.GET.get('owner_profile') == 'true':
             return Studio.objects.filter(owner=self.request.user)
         return Studio.objects.all()
 
     def get(self, request, *args, **kwargs):
         studio_id = request.data.get('id')
+        print(self.request.user.id)
         if studio_id:
             studio = get_object_or_404(Studio, pk=studio_id)
             serializer = self.get_serializer(studio)
@@ -160,12 +161,15 @@ class ReservationAPIView(generics.ListCreateAPIView, generics.UpdateAPIView, gen
 
     def create(self, request, *args, **kwargs):
         with transaction.atomic():
+            # Add the authenticated user as the customer
+            request.data['customer'] = request.user.id
+
+            # Proceed with creating the reservation
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def update(self, request, *args, **kwargs):
         with transaction.atomic():
             reservation_id = request.data.get('id')

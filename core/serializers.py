@@ -38,7 +38,7 @@ class StudioSerializer(serializers.ModelSerializer):
     images = StudioImageSerializer(many=True, read_only=True)
     class Meta:
         model = Studio
-        fields = ['id', 'owner', 'name', 'address', 'created_at', 'price', 'rate']
+        fields = ['id', 'owner', 'name', 'address', 'created_at', 'price', 'rate' , 'images']
         read_only_fields = ['id', 'created_at']
         
 
